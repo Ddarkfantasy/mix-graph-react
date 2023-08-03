@@ -1,0 +1,25 @@
+schema {
+  query: RootQueryType
+}
+
+type Link {
+  id: ID!
+  url: String!
+  description: String!
+}
+
+type User {
+  id: ID!
+  name: String!
+  email: String!
+  bio: String!
+  numberOfPets: Int!
+}
+
+type RootQueryType {
+  "Get all links"
+  allLinks: [Link!]!
+
+  "Get all users"
+  allUsers: [User!]!
+}
