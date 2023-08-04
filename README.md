@@ -1,6 +1,61 @@
 # mix-graph-react
+## Operation of Schema
+### Schema for ecto (Phoenix to database)
 
-### How to run the server and frontend on HTTPS
+#### 1. Create new schema by command
+```
+# create a users schema with name and age attributes in Accounts module(folder)
+mix phx.gen.context Accounts User users name:string age:integer
+# create a users schema with name and age attributes
+mix phx.gen.schema User users name:string age:integer
+```
+
+#### 2. Use migration to change table
+```
+mix ecto.gen.migration new_change_constraint
+```
+sample code of migration
+```
+def change do
+  alter table(:users) do
+    add :email, :string
+    modify :username, :string, null: false
+    remove :bio
+
+    timestamps()
+  end
+
+  create table(:projects) do
+    add :name, :string
+
+    timestamps()
+  end
+end
+```
+Run the following to migrate the change to databse:
+```
+mix ecto.migrate
+```
+
+#### 3. Set constraint to table
+1. in migration:
+```
+def change do
+  create unique_index(:users, [:username])
+  create unique_index(:users, [:email])
+end
+```
+2. in ecto schema:
+```
+def changeset(user, attrs) do
+  user
+  |> unique_constraint(:email)
+  |> unique_constraint(:username)
+end
+```
+
+
+## How to run the server and frontend on HTTPS
 
 #### 1. Change host setting in /etc/hosts
 
