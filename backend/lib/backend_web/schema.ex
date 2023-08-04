@@ -11,10 +11,22 @@ defmodule BackendWeb.Schema do
 
   object :user do
     field :id, non_null(:id)
-    field :name, non_null(:string)
     field :email, non_null(:string)
-    field :bio, non_null(:string)
-    field :number_of_pets, non_null(:integer)
+    field :firstname, non_null(:string)
+    field :lastname, non_null(:string)
+    field :username, non_null(:string)
+    field :age, non_null(:integer)
+    field :projects, (list_of(non_null(:project))) do
+      resolve(&SchemaResolver.user_projects/3)
+    end
+  end
+
+  object :project do
+    field :id, non_null(:id)
+    field :name, non_null(:string)
+    field :users, (list_of(non_null(:user))) do
+      resolve(&SchemaResolver.project_users/3)
+    end
   end
 
 

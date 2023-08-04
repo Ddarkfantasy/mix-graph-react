@@ -3,10 +3,12 @@ defmodule Backend.Schema.User do
   import Ecto.Changeset
 
   schema "users" do
-    field :bio, :string
     field :email, :string
-    field :name, :string
-    field :number_of_pets, :integer
+    field :firstname, :string
+    field :lastname, :string
+    field :username, :string
+    field :age, :integer
+    many_to_many :projects, Backend.Project, join_through: "projects_users"
 
     timestamps()
   end
@@ -14,10 +16,14 @@ defmodule Backend.Schema.User do
   @doc false
   def changeset(user, attrs) do
     user
-    |> cast(attrs, [:name, :email, :bio, :number_of_pets])
-    |> validate_required([:name, :email, :bio, :number_of_pets])
-    |> validate_length(:bio, min: 2)
-    |> validate_length(:bio, max: 140)
+    |> cast(attrs, [:email, :firstname, :lastname, :username, :age])
+    |> validate_required([:email, :firstname, :lastname, :username, :age])
+    |> validate_length(:firstname, min: 1, max: 30)
+    |> validate_length(:lastname, min: 1, max: 30)
+    |> validate_length(:username, min: 1, max: 30)
     |> validate_format(:email, ~r/@/)
+    |> validate_number(:age, greater_than: 0)
+    |> unique_constraint(:email)
+    |> unique_constraint(:username)
   end
 end

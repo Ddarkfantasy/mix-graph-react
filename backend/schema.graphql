@@ -10,10 +10,18 @@ type Link {
 
 type User {
   id: ID!
-  name: String!
   email: String!
-  bio: String!
-  numberOfPets: Int!
+  firstname: String!
+  lastname: String!
+  username: String!
+  age: Int!
+  projects: [Project!]
+}
+
+type Project {
+  id: ID!
+  name: String!
+  users: [User!]
 }
 
 type RootQueryType {
